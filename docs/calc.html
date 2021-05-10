@@ -1,0 +1,759 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.9.2" />
+<title>calc API documentation</title>
+<meta name="description" content="Performs the all mathematical calculations and organizes results." />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>calc</code></h1>
+</header>
+<section id="section-intro">
+<p>Performs the all mathematical calculations and organizes results.</p>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">&#34;&#34;&#34;Performs the all mathematical calculations and organizes results.&#34;&#34;&#34;
+import urllib.request as ur
+import pandas_datareader as pdr
+import pandas as pd
+from bs4 import BeautifulSoup
+import numpy as np
+import requests
+import datetime
+
+def calc(income,balance,cash,yrlab,tick):
+    &#34;&#34;&#34;
+    Perform a long list of calculations, and return the financial report we are interested in.
+
+    The output is also a dataframe.
+    &#34;&#34;&#34;
+##################################Income####################################
+    #Extract Data of Interest for Calculations
+    grpr = income.loc[&#39;Gross Profit&#39;]
+    trev = income.loc[&#39;Revenue&#39;]
+    #CoR = income.loc[&#39;Cost Of Goods Sold&#39;] Not in use
+    sga = income.loc[&#39;SG&amp;A Expenses&#39;]
+    pti = income.loc[&#39;Pre-Tax Income&#39;]
+    dni = income.loc[&#39;Net Income&#39;]
+    rnd = income.loc[&#39;Research And Development Expenses&#39;]
+    ebit = income.loc[&#39;EBIT&#39;]
+    inct = income.loc[&#39;Income Taxes&#39;]
+
+    #Calculate Financials of Interest
+    grm = grpr.divide(trev)
+    #Cm = abs(CoR.divide(TR)) not very helpful, just 1-Gm
+    sgam = abs(sga.divide(trev))
+    plm = dni.divide(trev)
+    rndm = abs(rnd.divide(trev))
+
+    intpay = ebit.sub(dni).sub(inct) #Interest Payments Calculation
+##################################Balance###################################
+    tass = balance.loc[&#39;Total Assets&#39;]
+    rec = balance.loc[&#39;Receivables&#39;]
+#    tlia = balance.loc[&#39;Total Liabilities&#39;]
+    std = balance.loc[&#39;Total Current Liabilities&#39;]
+    ltd = balance.loc[&#39;Total Long Term Liabilities&#39;] #Changed from &#39;Long Term Debt&#39;!!!
+    tdeb = std+ltd
+    tequ = balance.loc[&#39;Share Holder Equity&#39;]
+    #CSO = balance.loc[&#39;    Common Shares Outstanding&#39;] We never used this did we?
+
+    #These are cross sheet calculations, mixing data from income with balance
+    roa = dni.divide(tass)
+    roe = dni.divide(tequ)
+    roi = pti.divide(tdeb+tequ)
+    coc = intpay.divide(tdeb)
+
+    d2e = tdeb.divide(tequ)
+    d2a = tdeb.divide(tass)
+
+    #Generate blank series with correct labels to be used later
+    ato = pd.Series(np.zeros(len(yrlab)),index=yrlab)
+    rto = pd.Series(np.zeros(len(yrlab)),index=yrlab)
+    dtc = pd.Series(np.zeros(len(yrlab)),index=yrlab)
+    #Sometimes you got different length vectors for income and balance
+    if len(ato) &gt; len(tass):
+        ato.pop(yrlab[0])
+        trev.pop(yrlab[0])
+
+    ##Calculated back to front of array
+    i=0
+    top = len(ato)-1
+    ato[top]=0
+    #print(ato,trev,tass)
+    while i &lt; top:
+        i=i+1
+        ato[top-i] = trev[top-i]/((tass[top-i+1]+tass[top-i])/2)
+
+    i=0
+    while i &lt; top:
+        rto[top]=0
+        dtc[top]=0
+        i=i+1
+        rto[top-i] = trev[top-i]/((rec[top-i+1]+rec[top-i])/2)
+        try:
+            dtc[top-i] = round(365/rto[top-i])
+        except ZeroDivisionError:
+            dtc[top-i] = np.nan
+        except ValueError:
+            dtc[top-i] = np.nan
+##################################Cash-Flow#################################
+    ocf = cash.loc[&#39;Cash Flow From Operating Activities&#39;]*1000000
+    capex = cash.loc[&#39;Net Change In Property, Plant, And Equipment&#39;]*1000000
+    runkflow = ocf.add(capex)
+
+    row_labels = [&#39;Gross Margin&#39;,&#39;SGA Margin&#39;,&#39;RnD Margin&#39;,&#39;Profit/Loss Margin&#39;,
+                  &#39;Return on Asset&#39;,&#39;Return on Equity&#39;,&#39;Return on Investment&#39;,
+                  &#39;Cost of Capital&#39;,&#39;Debt to Equity&#39;,&#39;Debt to Asset&#39;,&#39;Asset Turn Over&#39;,
+                  &#39;Receivables Turn Over&#39;,&#39;Days to Collect&#39;,&#39;Operating Cash Flow&#39;,&#39;Free-Cash-Flow&#39;]
+    report = pd.DataFrame([grm,sgam,rndm,plm,roa,roe,roi,coc,
+                           d2e,d2a,ato,rto,dtc,ocf,runkflow],index=row_labels)
+    report.name = &#39;Runkle Financial Analysis Report (RFAR for &#39; + tick + &#39;)&#39;
+    return report
+
+def forcast(fcf_avg,yrs_len,grow):
+    &#34;&#34;&#34;
+    Forecast the growth of cash flow by the desired amount of years.
+
+    The length of years is usually anywhere from five to ten.
+    Growth is a parameter set outside the function and usually is pessimistically set to zero.
+    &#34;&#34;&#34;
+    i=0
+    f_fcf = np.zeros(yrs_len)
+    f_fcf[0] = fcf_avg
+    while i &lt; (yrs_len-1):
+        f_fcf[i+1] = f_fcf[i]*(1+grow)
+        i=i+1
+    return f_fcf
+
+def discount(f_fcf,yrs_len,disc):
+    &#34;&#34;&#34;
+    Discount each year in the forecasted cash flow by a power law.
+
+    The discount percent is the return you want to see in your investment, often set to 7%.
+    &#34;&#34;&#34;
+    i=0
+    d_fcf = np.zeros(yrs_len)
+    for yer in range(yrs_len):
+        d_fcf[i] = f_fcf[i]/(1+disc)**(yer+1)
+        i=i+1
+    return d_fcf
+
+def list_avg(listy):
+    &#34;&#34;&#34;Take an average of a given list.&#34;&#34;&#34;
+    return sum(listy) / len(listy)
+
+def num_form(num,style):
+    &#34;&#34;&#34;Format a variety numbers into readable strings.&#34;&#34;&#34;
+    
+    if style == &#39;big&#39;:
+        if num &gt;= 1000000 and num &lt;= 999999999:
+            fnum = str(round(num/1000000,3))+&#39; M&#39;
+        if num &gt;= 1000000000 and num &lt;= 999999999999:
+            fnum = str(round(num/1000000000,3))+&#39; B&#39;
+        if num &gt;= 1000000000000:
+            fnum = str(round(num/1000000000000,3))+&#39; T&#39;
+    elif style == &#39;perc&#39;:
+        fnum = str(round(num*100,3))+&#39;%&#39;    
+    elif style == &#39;doll&#39;:
+        fnum = &#39;$&#39;+str(round(num,2))
+    else:
+        fnum = f&#34;Style {style} not recognize&#34; 
+            
+    return fnum
+
+def num_raw(num,style):
+    &#34;&#34;&#34;Reverse process of num_form function.&#34;&#34;&#34;
+    
+    if style == &#39;big&#39;:
+        print(num)
+        if &#39;M&#39; in num:
+            rnum = float(num.replace(&#39; M&#39;,&#39;&#39;))*1000000
+        elif &#39;B&#39; in num:
+            rnum = float(num.replace(&#39; B&#39;,&#39;&#39;))*1000000000
+        elif &#39;T&#39; in num:
+            rnum = float(num.replace(&#39; B&#39;,&#39;&#39;))*1000000000000
+    elif style == &#39;perc&#39;:
+        rnum = float(num.replace(&#39;%&#39;,&#39;&#39;))    
+    elif style == &#39;doll&#39;:
+        rnum = float(num.replace(&#39;$&#39;,&#39;&#39;))
+    else:
+        rnum = f&#34;Style {style} not recognize&#34;
+    return rnum
+
+def valuation(tick,yrlab,report,yrs_bak,yrs_len):
+    &#34;&#34;&#34;
+    Utilizes the forecast, discount, and list_avg functions to place a fair value on a given company.
+
+    The output is another dataframe containing relevant information to the valuation calculation.
+    The main metric in the output is a percentage derived from: (realPrice-fairPrice)/(fairPrice).
+    If positive: overvalued by the given percent. If negative: undervalued by the given percent.
+    &#34;&#34;&#34;
+    excel_file = &#34;../docs/caps.xlsx&#34;
+    caps = pd.read_excel(excel_file,sheet_name=&#39;CAPS&#39;,nrows=21,index_col=0)
+    disc = 0.07
+    infl = 0.02
+    grow = 0.00
+
+#    print(&#39;Discount: &#39;,disc,&#39;%&#39;,&#39;\nInflation: &#39;,infl,&#39;%&#39;,&#39;\nGrowth: &#39;,grow,&#39;%&#39;)
+
+    assum = pd.DataFrame([disc,infl,grow],index=[&#39;Discount Rate: &#39;,&#39;Inflation: &#39;,&#39;Growth: &#39;],
+                         columns=[&#39;Fair Value Discount Assumptions&#39;])
+
+    ##################################OLD##############################################
+#     #Basic Scrape
+#     url = &#39;https://www.macrotrends.net/stocks/charts/&#39; + tick + &#39;/hyung/free-cash-flow&#39;
+#     read = ur.urlopen(url).read()
+#     soup = BeautifulSoup(read,&#39;lxml&#39;)
+#     mydat = soup.find_all(&#39;div&#39;)
+
+#     #Intelligent Index Selection
+#     i=0
+#     listy=[]
+#     twisty=[]
+#     for d in mydat:
+#         listy.append(len(str(d)))
+#         if &#39;Free Cash Flow&#39; in str(d) and &#39;historical_data_table table&#39; in str(d):
+#             twisty.append(len(str(d)))
+#         i+=1
+#     ind = listy.index(min(twisty))
+#     takara = mydat[ind]
+    ##################################OLD##############################################
+    
+    
+    #Time Dynamic Selection of Historic FCF
+    yrs_max = len(yrlab)
+    if yrs_len &gt; (yrs_max-(yrs_bak-1)):
+        yrs_len = (yrs_max-(yrs_bak-1))
+    if yrs_bak == 0:
+        fcf = report.loc[&#39;Free-Cash-Flow&#39;][:yrs_len]
+    else:
+        fcf = report.loc[&#39;Free-Cash-Flow&#39;][(yrs_bak-1):(yrs_len+yrs_bak-1)]
+    #(if statement handles overselection as in going back 10 years of 12 year data and looking for 5 year history)
+    #Macrotrends starts providing data at 2020, its 2021 right now, thus the extra -1.
+    #ALWAYS COUNT YRS BACK FROM CURRENT YEAR YOU ARE LIVING IN, NOT VIA STUPID MACROTRENDS RECORDS
+
+    fcf_avg = list_avg(fcf)
+    
+
+
+
+
+###########################Actual Calculation##################################
+
+    #Calculate forecasted and discounted CF vectors
+    f_fcf = forcast(fcf_avg,yrs_len,grow)
+    d_fcf = discount(f_fcf,yrs_len,disc)
+    #Calc terminal and fair value
+    t_val = f_fcf[yrs_len-1]*(1+infl)/(disc-infl)
+    f_val = d_fcf.sum()+t_val #Old Discounted Cash Flow Calculation
+    #f_val = fcf_avg/disc
+    
+    #Find the &#39;Current&#39; actual price, either live or dated.
+    if yrs_bak == 0:
+        mcap = pdr.data.get_quote_yahoo(tick)[&#39;marketCap&#39;][0]
+        shares = pdr.data.get_quote_yahoo(tick)[&#39;sharesOutstanding&#39;][tick]
+        price = pdr.data.get_quote_yahoo(tick)[&#39;regularMarketPreviousClose&#39;][0]
+        #Live error is the percentage difference between Market Cap derived stock price
+        # and the previous close stock price.
+        error = round(np.abs(((mcap/shares)-price)/price),3)
+#        print(&#39;Live error: &#39;,error,&#39;\n&#39;)
+    else:
+#        print(caps.loc[(int(datetime.date.today().year)-yrs_bak)],&#39;\n^^^ MarketCap, Time @ end of Year Shown ^^^&#39;)
+        mcap = caps[tick][(int(datetime.date.today().year)-yrs_bak)]
+        stupid_param = str(int(datetime.date.today().year) - (yrs_bak-1)) #This is insane. 
+        #I really need to figure this out someday...
+        #You see, two different data sources have different levels of current... It messes up indexing.
+        if &#39;.&#39; in tick:
+            tick=tick.replace(&#39;.&#39;,&#39;-&#39;)
+        link = &#39;https://query1.finance.yahoo.com/v8/finance/chart/&#39;+tick+&#39;?interval=1mo&amp;range=&#39;+str(yrs_bak+1)+&#39;y&#39;
+
+        r = requests.get(link)
+        time = r.json()[&#39;chart&#39;][&#39;result&#39;][0][&#39;timestamp&#39;]
+        high = r.json()[&#39;chart&#39;][&#39;result&#39;][0][&#39;indicators&#39;][&#39;quote&#39;][0][&#39;high&#39;]
+        low = r.json()[&#39;chart&#39;][&#39;result&#39;][0][&#39;indicators&#39;][&#39;quote&#39;][0][&#39;high&#39;]
+
+        i=0
+        for t in time:
+            timestamp = datetime.datetime.fromtimestamp(int(t))
+            if stupid_param+&#39;-01&#39; in timestamp.strftime(&#39;%Y-%m-%d %H:%M:%S&#39;):
+#                print(&#39;Time of price: &#39;,timestamp.strftime(&#39;%Y-%m-%d %H:%M:%S&#39;))
+                price = (high[i]+low[i])/2
+            i+=1
+        shares = round(mcap/price)
+        error = 0
+#        print(&#39;Stupid error, code later: &#39;,error,&#39;\n&#39;)
+
+    f_price = f_val/shares
+    f_price = round(f_price,2)
+
+######################################################################
+
+    if len(fcf) &gt;= 5:
+        qk_sc = list_avg(fcf[:5])/0.07
+    else:
+        qk_sc = list_avg(fcf)/0.07
+        print(f&#34;Limited data. Calculating Quick Screen from {len(fcf)} yrs of data&#34;)
+        #Quick Screen Value, present cash over expected return
+
+    if f_val &gt; 0:
+#        print(&#39;Fair Value: &#39;,f_val,&#39;\nFair Price: &#39;,f_price,
+#              &#39;\n\nMarket Cap: &#39;,mcap,&#39;\nStock Price: &#39;,price,&#39;\n&#39;)
+        valuation = (mcap-f_val)/(f_val)
+        if valuation &lt; 0:
+#            print(&#39;Stock Under-Priced By: &#39;,round(valuation*100),&#39;%&#39;)
+            col = [&#39;Fair Valuation, Cash Discounted Method&#39;]
+            ind = [&#39;Fair Value&#39;,&#39;Fair Price&#39;,&#39;Market Cap&#39;,&#39;Stock Price&#39;,
+                   &#39;Stock Under-Priced By&#39;,&#39;Years of Data Used&#39;,&#39;Quick Screen Value (5 year avg)&#39;]
+            val_report = pd.DataFrame([num_form(f_val,&#39;big&#39;),num_form(f_price,&#39;doll&#39;),num_form(mcap,&#39;big&#39;),
+                                       num_form(price,&#39;doll&#39;),num_form(valuation,&#39;perc&#39;),len(fcf),
+                                       num_form(qk_sc,&#39;big&#39;)],columns=col, index=ind)
+        else:
+#            print(&#39;Stock Over-Priced By: &#39;,round(valuation*100),&#39;%&#39;)
+            col = [&#39;Fair Valuation, Cash Discounted Method&#39;]
+            ind = [&#39;Fair Value&#39;,&#39;Fair Price&#39;,&#39;Market Cap&#39;,&#39;Stock Price&#39;,
+                   &#39;Stock Over-Priced By&#39;,&#39;Years of Data Used&#39;,&#39;Quick Screen Value (5 year avg)&#39;]
+            val_report = pd.DataFrame([num_form(f_val,&#39;big&#39;),num_form(f_price,&#39;doll&#39;),num_form(mcap,&#39;big&#39;),
+                                       num_form(price,&#39;doll&#39;),num_form(valuation,&#39;perc&#39;),len(fcf),
+                                       num_form(qk_sc,&#39;big&#39;)],columns=col, index=ind)
+    else:
+#        print(&#39;Average Free Cash Flow is NEGATIVE. Valuation Statement is Meaningless&#39;)
+#        print(&#39;\n\nMarket Cap: &#39;,mcap,&#39;\nStock Price: &#39;,stock,&#39;\n&#39;)
+        col = [&#39;Fair Valuation, Cash Discounted Method&#39;]
+        ind = [&#39;Average Free Cash Flow is NEGATIVE. Valuation Statement is Meaningless&#39;,
+               &#39;Market Cap: &#39;,&#39;Stock Price: &#39;]
+        val_report = pd.DataFrame([np.nan,num_form(mcap),price],columns=col, index=ind)
+    return(val_report,assum)</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="calc.calc"><code class="name flex">
+<span>def <span class="ident">calc</span></span>(<span>income, balance, cash, yrlab, tick)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Perform a long list of calculations, and return the financial report we are interested in.</p>
+<p>The output is also a dataframe.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def calc(income,balance,cash,yrlab,tick):
+    &#34;&#34;&#34;
+    Perform a long list of calculations, and return the financial report we are interested in.
+
+    The output is also a dataframe.
+    &#34;&#34;&#34;
+##################################Income####################################
+    #Extract Data of Interest for Calculations
+    grpr = income.loc[&#39;Gross Profit&#39;]
+    trev = income.loc[&#39;Revenue&#39;]
+    #CoR = income.loc[&#39;Cost Of Goods Sold&#39;] Not in use
+    sga = income.loc[&#39;SG&amp;A Expenses&#39;]
+    pti = income.loc[&#39;Pre-Tax Income&#39;]
+    dni = income.loc[&#39;Net Income&#39;]
+    rnd = income.loc[&#39;Research And Development Expenses&#39;]
+    ebit = income.loc[&#39;EBIT&#39;]
+    inct = income.loc[&#39;Income Taxes&#39;]
+
+    #Calculate Financials of Interest
+    grm = grpr.divide(trev)
+    #Cm = abs(CoR.divide(TR)) not very helpful, just 1-Gm
+    sgam = abs(sga.divide(trev))
+    plm = dni.divide(trev)
+    rndm = abs(rnd.divide(trev))
+
+    intpay = ebit.sub(dni).sub(inct) #Interest Payments Calculation
+##################################Balance###################################
+    tass = balance.loc[&#39;Total Assets&#39;]
+    rec = balance.loc[&#39;Receivables&#39;]
+#    tlia = balance.loc[&#39;Total Liabilities&#39;]
+    std = balance.loc[&#39;Total Current Liabilities&#39;]
+    ltd = balance.loc[&#39;Total Long Term Liabilities&#39;] #Changed from &#39;Long Term Debt&#39;!!!
+    tdeb = std+ltd
+    tequ = balance.loc[&#39;Share Holder Equity&#39;]
+    #CSO = balance.loc[&#39;    Common Shares Outstanding&#39;] We never used this did we?
+
+    #These are cross sheet calculations, mixing data from income with balance
+    roa = dni.divide(tass)
+    roe = dni.divide(tequ)
+    roi = pti.divide(tdeb+tequ)
+    coc = intpay.divide(tdeb)
+
+    d2e = tdeb.divide(tequ)
+    d2a = tdeb.divide(tass)
+
+    #Generate blank series with correct labels to be used later
+    ato = pd.Series(np.zeros(len(yrlab)),index=yrlab)
+    rto = pd.Series(np.zeros(len(yrlab)),index=yrlab)
+    dtc = pd.Series(np.zeros(len(yrlab)),index=yrlab)
+    #Sometimes you got different length vectors for income and balance
+    if len(ato) &gt; len(tass):
+        ato.pop(yrlab[0])
+        trev.pop(yrlab[0])
+
+    ##Calculated back to front of array
+    i=0
+    top = len(ato)-1
+    ato[top]=0
+    #print(ato,trev,tass)
+    while i &lt; top:
+        i=i+1
+        ato[top-i] = trev[top-i]/((tass[top-i+1]+tass[top-i])/2)
+
+    i=0
+    while i &lt; top:
+        rto[top]=0
+        dtc[top]=0
+        i=i+1
+        rto[top-i] = trev[top-i]/((rec[top-i+1]+rec[top-i])/2)
+        try:
+            dtc[top-i] = round(365/rto[top-i])
+        except ZeroDivisionError:
+            dtc[top-i] = np.nan
+        except ValueError:
+            dtc[top-i] = np.nan
+##################################Cash-Flow#################################
+    ocf = cash.loc[&#39;Cash Flow From Operating Activities&#39;]*1000000
+    capex = cash.loc[&#39;Net Change In Property, Plant, And Equipment&#39;]*1000000
+    runkflow = ocf.add(capex)
+
+    row_labels = [&#39;Gross Margin&#39;,&#39;SGA Margin&#39;,&#39;RnD Margin&#39;,&#39;Profit/Loss Margin&#39;,
+                  &#39;Return on Asset&#39;,&#39;Return on Equity&#39;,&#39;Return on Investment&#39;,
+                  &#39;Cost of Capital&#39;,&#39;Debt to Equity&#39;,&#39;Debt to Asset&#39;,&#39;Asset Turn Over&#39;,
+                  &#39;Receivables Turn Over&#39;,&#39;Days to Collect&#39;,&#39;Operating Cash Flow&#39;,&#39;Free-Cash-Flow&#39;]
+    report = pd.DataFrame([grm,sgam,rndm,plm,roa,roe,roi,coc,
+                           d2e,d2a,ato,rto,dtc,ocf,runkflow],index=row_labels)
+    report.name = &#39;Runkle Financial Analysis Report (RFAR for &#39; + tick + &#39;)&#39;
+    return report</code></pre>
+</details>
+</dd>
+<dt id="calc.discount"><code class="name flex">
+<span>def <span class="ident">discount</span></span>(<span>f_fcf, yrs_len, disc)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Discount each year in the forecasted cash flow by a power law.</p>
+<p>The discount percent is the return you want to see in your investment, often set to 7%.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def discount(f_fcf,yrs_len,disc):
+    &#34;&#34;&#34;
+    Discount each year in the forecasted cash flow by a power law.
+
+    The discount percent is the return you want to see in your investment, often set to 7%.
+    &#34;&#34;&#34;
+    i=0
+    d_fcf = np.zeros(yrs_len)
+    for yer in range(yrs_len):
+        d_fcf[i] = f_fcf[i]/(1+disc)**(yer+1)
+        i=i+1
+    return d_fcf</code></pre>
+</details>
+</dd>
+<dt id="calc.forcast"><code class="name flex">
+<span>def <span class="ident">forcast</span></span>(<span>fcf_avg, yrs_len, grow)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Forecast the growth of cash flow by the desired amount of years.</p>
+<p>The length of years is usually anywhere from five to ten.
+Growth is a parameter set outside the function and usually is pessimistically set to zero.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def forcast(fcf_avg,yrs_len,grow):
+    &#34;&#34;&#34;
+    Forecast the growth of cash flow by the desired amount of years.
+
+    The length of years is usually anywhere from five to ten.
+    Growth is a parameter set outside the function and usually is pessimistically set to zero.
+    &#34;&#34;&#34;
+    i=0
+    f_fcf = np.zeros(yrs_len)
+    f_fcf[0] = fcf_avg
+    while i &lt; (yrs_len-1):
+        f_fcf[i+1] = f_fcf[i]*(1+grow)
+        i=i+1
+    return f_fcf</code></pre>
+</details>
+</dd>
+<dt id="calc.list_avg"><code class="name flex">
+<span>def <span class="ident">list_avg</span></span>(<span>listy)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Take an average of a given list.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def list_avg(listy):
+    &#34;&#34;&#34;Take an average of a given list.&#34;&#34;&#34;
+    return sum(listy) / len(listy)</code></pre>
+</details>
+</dd>
+<dt id="calc.num_form"><code class="name flex">
+<span>def <span class="ident">num_form</span></span>(<span>num, style)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Format a variety numbers into readable strings.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def num_form(num,style):
+    &#34;&#34;&#34;Format a variety numbers into readable strings.&#34;&#34;&#34;
+    
+    if style == &#39;big&#39;:
+        if num &gt;= 1000000 and num &lt;= 999999999:
+            fnum = str(round(num/1000000,3))+&#39; M&#39;
+        if num &gt;= 1000000000 and num &lt;= 999999999999:
+            fnum = str(round(num/1000000000,3))+&#39; B&#39;
+        if num &gt;= 1000000000000:
+            fnum = str(round(num/1000000000000,3))+&#39; T&#39;
+    elif style == &#39;perc&#39;:
+        fnum = str(round(num*100,3))+&#39;%&#39;    
+    elif style == &#39;doll&#39;:
+        fnum = &#39;$&#39;+str(round(num,2))
+    else:
+        fnum = f&#34;Style {style} not recognize&#34; 
+            
+    return fnum</code></pre>
+</details>
+</dd>
+<dt id="calc.num_raw"><code class="name flex">
+<span>def <span class="ident">num_raw</span></span>(<span>num, style)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Reverse process of num_form function.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def num_raw(num,style):
+    &#34;&#34;&#34;Reverse process of num_form function.&#34;&#34;&#34;
+    
+    if style == &#39;big&#39;:
+        print(num)
+        if &#39;M&#39; in num:
+            rnum = float(num.replace(&#39; M&#39;,&#39;&#39;))*1000000
+        elif &#39;B&#39; in num:
+            rnum = float(num.replace(&#39; B&#39;,&#39;&#39;))*1000000000
+        elif &#39;T&#39; in num:
+            rnum = float(num.replace(&#39; B&#39;,&#39;&#39;))*1000000000000
+    elif style == &#39;perc&#39;:
+        rnum = float(num.replace(&#39;%&#39;,&#39;&#39;))    
+    elif style == &#39;doll&#39;:
+        rnum = float(num.replace(&#39;$&#39;,&#39;&#39;))
+    else:
+        rnum = f&#34;Style {style} not recognize&#34;
+    return rnum</code></pre>
+</details>
+</dd>
+<dt id="calc.valuation"><code class="name flex">
+<span>def <span class="ident">valuation</span></span>(<span>tick, yrlab, report, yrs_bak, yrs_len)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Utilizes the forecast, discount, and list_avg functions to place a fair value on a given company.</p>
+<p>The output is another dataframe containing relevant information to the valuation calculation.
+The main metric in the output is a percentage derived from: (realPrice-fairPrice)/(fairPrice).
+If positive: overvalued by the given percent. If negative: undervalued by the given percent.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def valuation(tick,yrlab,report,yrs_bak,yrs_len):
+    &#34;&#34;&#34;
+    Utilizes the forecast, discount, and list_avg functions to place a fair value on a given company.
+
+    The output is another dataframe containing relevant information to the valuation calculation.
+    The main metric in the output is a percentage derived from: (realPrice-fairPrice)/(fairPrice).
+    If positive: overvalued by the given percent. If negative: undervalued by the given percent.
+    &#34;&#34;&#34;
+    excel_file = &#34;../docs/caps.xlsx&#34;
+    caps = pd.read_excel(excel_file,sheet_name=&#39;CAPS&#39;,nrows=21,index_col=0)
+    disc = 0.07
+    infl = 0.02
+    grow = 0.00
+
+#    print(&#39;Discount: &#39;,disc,&#39;%&#39;,&#39;\nInflation: &#39;,infl,&#39;%&#39;,&#39;\nGrowth: &#39;,grow,&#39;%&#39;)
+
+    assum = pd.DataFrame([disc,infl,grow],index=[&#39;Discount Rate: &#39;,&#39;Inflation: &#39;,&#39;Growth: &#39;],
+                         columns=[&#39;Fair Value Discount Assumptions&#39;])
+
+    ##################################OLD##############################################
+#     #Basic Scrape
+#     url = &#39;https://www.macrotrends.net/stocks/charts/&#39; + tick + &#39;/hyung/free-cash-flow&#39;
+#     read = ur.urlopen(url).read()
+#     soup = BeautifulSoup(read,&#39;lxml&#39;)
+#     mydat = soup.find_all(&#39;div&#39;)
+
+#     #Intelligent Index Selection
+#     i=0
+#     listy=[]
+#     twisty=[]
+#     for d in mydat:
+#         listy.append(len(str(d)))
+#         if &#39;Free Cash Flow&#39; in str(d) and &#39;historical_data_table table&#39; in str(d):
+#             twisty.append(len(str(d)))
+#         i+=1
+#     ind = listy.index(min(twisty))
+#     takara = mydat[ind]
+    ##################################OLD##############################################
+    
+    
+    #Time Dynamic Selection of Historic FCF
+    yrs_max = len(yrlab)
+    if yrs_len &gt; (yrs_max-(yrs_bak-1)):
+        yrs_len = (yrs_max-(yrs_bak-1))
+    if yrs_bak == 0:
+        fcf = report.loc[&#39;Free-Cash-Flow&#39;][:yrs_len]
+    else:
+        fcf = report.loc[&#39;Free-Cash-Flow&#39;][(yrs_bak-1):(yrs_len+yrs_bak-1)]
+    #(if statement handles overselection as in going back 10 years of 12 year data and looking for 5 year history)
+    #Macrotrends starts providing data at 2020, its 2021 right now, thus the extra -1.
+    #ALWAYS COUNT YRS BACK FROM CURRENT YEAR YOU ARE LIVING IN, NOT VIA STUPID MACROTRENDS RECORDS
+
+    fcf_avg = list_avg(fcf)
+    
+
+
+
+
+###########################Actual Calculation##################################
+
+    #Calculate forecasted and discounted CF vectors
+    f_fcf = forcast(fcf_avg,yrs_len,grow)
+    d_fcf = discount(f_fcf,yrs_len,disc)
+    #Calc terminal and fair value
+    t_val = f_fcf[yrs_len-1]*(1+infl)/(disc-infl)
+    f_val = d_fcf.sum()+t_val #Old Discounted Cash Flow Calculation
+    #f_val = fcf_avg/disc
+    
+    #Find the &#39;Current&#39; actual price, either live or dated.
+    if yrs_bak == 0:
+        mcap = pdr.data.get_quote_yahoo(tick)[&#39;marketCap&#39;][0]
+        shares = pdr.data.get_quote_yahoo(tick)[&#39;sharesOutstanding&#39;][tick]
+        price = pdr.data.get_quote_yahoo(tick)[&#39;regularMarketPreviousClose&#39;][0]
+        #Live error is the percentage difference between Market Cap derived stock price
+        # and the previous close stock price.
+        error = round(np.abs(((mcap/shares)-price)/price),3)
+#        print(&#39;Live error: &#39;,error,&#39;\n&#39;)
+    else:
+#        print(caps.loc[(int(datetime.date.today().year)-yrs_bak)],&#39;\n^^^ MarketCap, Time @ end of Year Shown ^^^&#39;)
+        mcap = caps[tick][(int(datetime.date.today().year)-yrs_bak)]
+        stupid_param = str(int(datetime.date.today().year) - (yrs_bak-1)) #This is insane. 
+        #I really need to figure this out someday...
+        #You see, two different data sources have different levels of current... It messes up indexing.
+        if &#39;.&#39; in tick:
+            tick=tick.replace(&#39;.&#39;,&#39;-&#39;)
+        link = &#39;https://query1.finance.yahoo.com/v8/finance/chart/&#39;+tick+&#39;?interval=1mo&amp;range=&#39;+str(yrs_bak+1)+&#39;y&#39;
+
+        r = requests.get(link)
+        time = r.json()[&#39;chart&#39;][&#39;result&#39;][0][&#39;timestamp&#39;]
+        high = r.json()[&#39;chart&#39;][&#39;result&#39;][0][&#39;indicators&#39;][&#39;quote&#39;][0][&#39;high&#39;]
+        low = r.json()[&#39;chart&#39;][&#39;result&#39;][0][&#39;indicators&#39;][&#39;quote&#39;][0][&#39;high&#39;]
+
+        i=0
+        for t in time:
+            timestamp = datetime.datetime.fromtimestamp(int(t))
+            if stupid_param+&#39;-01&#39; in timestamp.strftime(&#39;%Y-%m-%d %H:%M:%S&#39;):
+#                print(&#39;Time of price: &#39;,timestamp.strftime(&#39;%Y-%m-%d %H:%M:%S&#39;))
+                price = (high[i]+low[i])/2
+            i+=1
+        shares = round(mcap/price)
+        error = 0
+#        print(&#39;Stupid error, code later: &#39;,error,&#39;\n&#39;)
+
+    f_price = f_val/shares
+    f_price = round(f_price,2)
+
+######################################################################
+
+    if len(fcf) &gt;= 5:
+        qk_sc = list_avg(fcf[:5])/0.07
+    else:
+        qk_sc = list_avg(fcf)/0.07
+        print(f&#34;Limited data. Calculating Quick Screen from {len(fcf)} yrs of data&#34;)
+        #Quick Screen Value, present cash over expected return
+
+    if f_val &gt; 0:
+#        print(&#39;Fair Value: &#39;,f_val,&#39;\nFair Price: &#39;,f_price,
+#              &#39;\n\nMarket Cap: &#39;,mcap,&#39;\nStock Price: &#39;,price,&#39;\n&#39;)
+        valuation = (mcap-f_val)/(f_val)
+        if valuation &lt; 0:
+#            print(&#39;Stock Under-Priced By: &#39;,round(valuation*100),&#39;%&#39;)
+            col = [&#39;Fair Valuation, Cash Discounted Method&#39;]
+            ind = [&#39;Fair Value&#39;,&#39;Fair Price&#39;,&#39;Market Cap&#39;,&#39;Stock Price&#39;,
+                   &#39;Stock Under-Priced By&#39;,&#39;Years of Data Used&#39;,&#39;Quick Screen Value (5 year avg)&#39;]
+            val_report = pd.DataFrame([num_form(f_val,&#39;big&#39;),num_form(f_price,&#39;doll&#39;),num_form(mcap,&#39;big&#39;),
+                                       num_form(price,&#39;doll&#39;),num_form(valuation,&#39;perc&#39;),len(fcf),
+                                       num_form(qk_sc,&#39;big&#39;)],columns=col, index=ind)
+        else:
+#            print(&#39;Stock Over-Priced By: &#39;,round(valuation*100),&#39;%&#39;)
+            col = [&#39;Fair Valuation, Cash Discounted Method&#39;]
+            ind = [&#39;Fair Value&#39;,&#39;Fair Price&#39;,&#39;Market Cap&#39;,&#39;Stock Price&#39;,
+                   &#39;Stock Over-Priced By&#39;,&#39;Years of Data Used&#39;,&#39;Quick Screen Value (5 year avg)&#39;]
+            val_report = pd.DataFrame([num_form(f_val,&#39;big&#39;),num_form(f_price,&#39;doll&#39;),num_form(mcap,&#39;big&#39;),
+                                       num_form(price,&#39;doll&#39;),num_form(valuation,&#39;perc&#39;),len(fcf),
+                                       num_form(qk_sc,&#39;big&#39;)],columns=col, index=ind)
+    else:
+#        print(&#39;Average Free Cash Flow is NEGATIVE. Valuation Statement is Meaningless&#39;)
+#        print(&#39;\n\nMarket Cap: &#39;,mcap,&#39;\nStock Price: &#39;,stock,&#39;\n&#39;)
+        col = [&#39;Fair Valuation, Cash Discounted Method&#39;]
+        ind = [&#39;Average Free Cash Flow is NEGATIVE. Valuation Statement is Meaningless&#39;,
+               &#39;Market Cap: &#39;,&#39;Stock Price: &#39;]
+        val_report = pd.DataFrame([np.nan,num_form(mcap),price],columns=col, index=ind)
+    return(val_report,assum)</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+<section>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="two-column">
+<li><code><a title="calc.calc" href="#calc.calc">calc</a></code></li>
+<li><code><a title="calc.discount" href="#calc.discount">discount</a></code></li>
+<li><code><a title="calc.forcast" href="#calc.forcast">forcast</a></code></li>
+<li><code><a title="calc.list_avg" href="#calc.list_avg">list_avg</a></code></li>
+<li><code><a title="calc.num_form" href="#calc.num_form">num_form</a></code></li>
+<li><code><a title="calc.num_raw" href="#calc.num_raw">num_raw</a></code></li>
+<li><code><a title="calc.valuation" href="#calc.valuation">valuation</a></code></li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.2</a>.</p>
+</footer>
+</body>
+</html>

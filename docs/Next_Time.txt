@@ -1,0 +1,20 @@
+Things I'm working on at the moment:
+
+Valeria in the Yuqi module. 
+* Something that can be used more flexibly when the machine learning model for growth parameter is finished.
+* I also wanna finish this rn because I feel like it will give me an intuitive feeling for how growth is used in valuation calculation.
+    * Get valeria to run for a single company, and try out changing the growth around.
+
+Number formatting in Yuqi. Individual functions can be applied to dataframes. This is cool. I'd like to test it.
+
+Generating Xrray and Yrray for the ratios-growth linear regression.
+* I believe the Xrray is done. As long as you loop over every tick with minnie.macro_ratios you're good.
+* There is some "Y-ish" data when using minnie.macro_caps but the ACTUAL Y-label for the linear fit will be calculated growth params.
+    * There ARE 3 growth param calculations currently made rn. So you could string together those functions with caps...
+    * Honestly it's practically done, you just write a loop with macro_caps --> XXX_grow for each tick and that's your label.
+* An interesting set of combinations to try:
+    * (Price, Market Cap, ROI, PtI, FCF) x (simple, fit, runk, reverseFCF) = 20 combinations... (5x4)
+
+QUESTION: What is a true fair value estimate? What future metrics can tell you that number is correct?
+ *** If your discounting and forecasting assumptions match what actually happens in the future. ***
+
