@@ -1,11 +1,99 @@
 """File I/O and Scraping."""
 import re
 import urllib.request as ur
+from urllib.error import HTTPError
 import pandas as pd
 from bs4 import BeautifulSoup
 import soojin
 import yuqi
 import numpy as np
+from socket import timeout
+
+def yahoo_fcf(tick):
+    soup = scrape(f"https://finance.yahoo.com/quote/{tick}/cash-flow?p={tick}")
+    data = scout(soup,'div',output=False)
+
+    table = data[0]
+
+    groups = scout(table,'span',output=False)
+
+    ind=0
+    for g in groups:
+        if g.text == 'Free Cash Flow':
+            break
+        ind +=1
+
+    ind +=2 #Skip the title and TTM
+    fcf=[]
+    while ind < 10000: #Iterating Loop with some arbitrary condition
+        if groups[ind].text == 'Learn more':
+            break
+        else:
+            fcf.append(int(groups[ind].text.replace(',',''))*1000)
+        ind +=1
+
+        avg = yuqi.list_avg(fcf)
+        trend = yuqi.num2perc(soojin.linfit(fcf)[0]/np.abs(avg))
+
+    return (avg,trend,len(fcf))
+
+def macro_fcf(tick):
+    soup = scrape(f"https://www.macrotrends.net/stocks/charts/{tick}/CHINGUS/free-cash-flow")
+    data = scout(soup,'div',output=False)
+
+    ind = 0
+    for d in data:
+        if len(d.text) > 1000:
+            div = d
+            break
+        ind +=1
+
+    tables = scout(div,'tbody',output=False)
+    ann = tables[0]
+    qtr = tables[1]
+
+    ann1 = scout(ann,'td',output=False)
+
+    fcf=[]
+    i=1
+    while i < len(ann1):
+        fcf.append(ann1[i].text)
+        i+=2
+        if len(fcf) > 4:
+            break
+
+
+    qtr1 = scout(qtr,'td',output=False)
+
+    ind=0
+    for q in qtr1:
+        if q.text == fcf[0]:
+            break
+        ind+=1
+
+    fcfQ=[]
+    if ind > 2: #check to make sure there are new quarters
+        ind-=2 #jump back to the quarter nearest the most recent annual statement
+        while ind > 0:
+            fcfQ.append(qtr1[ind].text)
+            ind-=2
+        extrp = (float(fcfQ[len(fcfQ)-1].replace(',',''))*1000000/len(fcfQ))*4 #extrapolated quarters
+        fcf.pop(len(fcf)-1)
+        temp=[]
+        for f in fcf:
+            temp.append(float(f.replace(',',''))*1000000)
+        fcf = temp
+        fcf.insert(0,extrp)
+    else:
+        temp=[]
+        for f in fcf:
+            temp.append(float(f.replace(',',''))*1000000)
+        fcf = temp
+
+    avg = yuqi.list_avg(fcf)
+    trend = yuqi.num2perc(soojin.linfit(fcf)[0]/np.abs(avg))
+
+    return (avg,trend,len(fcf))
 
 def macro_scrape(tick,sheet):
     """
@@ -117,7 +205,7 @@ def macro_prices(TICK,shares):
     ydat.insert(2,'Market Cap',ydat['Shares Outstanding']*ydat['Avg Annual Price'])
     return ydat
 
-def scrape(url):
+def scrape(url,fancy=False):
     """Scrapes a messy soup object from any url.
 
     I recommend using control+F on the output of this function to find the data you are looking for.
@@ -125,16 +213,32 @@ def scrape(url):
     Then use the scout function to find the index positioning of that data.
 
     If you wanna work manually you can use: soup.find_all(tag) and I'm sure it will all come back to you."""
-    read = ur.urlopen(url).read()       #Reads a whole big string mess
-    soup = BeautifulSoup(read,'lxml')   #Transforms string mess intro workable object: Soup
+
+    if fancy == False:
+        read = ur.urlopen(url).read()       #Reads a whole big string mess
+        soup = BeautifulSoup(read,'lxml')   #Transforms string mess intro workable object: Soup
+    else:
+        req = ur.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+        try:
+            read = ur.urlopen(req,timeout=3).read()       #Reads a whole big string mess
+        except timeout:
+            return None
+        soup = BeautifulSoup(read,'lxml')   #Transforms string mess intro workable object: Soup
     return soup
 
-def scout(soup,tag,output=True):
+def scout(soup,tag,output=True,tagclass=None):
     """Scouts messy soup for your tag of choice and places an index by each one.
 
     Here a several common tags: div, td, script, tr.
+    tr  --> Tables
+    div --> Macroscopic resolution
+    td  --> Microscopic resolution
+    script --> Volatile page elements
     This function returns the results list."""
-    result = soup.find_all(tag)
+    if tagclass == None:
+        result = soup.find_all(tag)
+    else:
+        result = soup.find_all(tag,{"class":tagclass})
 
     if output == True:
         i=0
@@ -148,7 +252,7 @@ def ez_read(file):
         dat = f.read()
     return dat
 
-def ez_write(data,file):
+def ez_write(data,file,opt):
     """Writes any object into a file.
 
     Currently this only supports simple strings and lists.
@@ -158,16 +262,16 @@ def ez_write(data,file):
     """
 
     if type(data) is str:
-        with open(f"{file}",'w') as file:
+        with open(f"{file}",opt,encoding='utf8') as file:
             file.write(data)
-    elif type(data) is list:
-        with open(f"{file}",'w') as file:
+    elif type(data) is list or type(data) is pd.core.series.Series:
+        with open(f"{file}",opt,encoding='utf8') as file:
             for d in data:
-                file.write(d)
+                file.write(str(d))
                 file.write('\n')
     else:
         data = str(data)
-        with open(f"{file}",'w') as file:
+        with open(f"{file}",opt,encoding='utf8') as file:
             file.write(data)
 
     return ('File closed: ',file.closed)

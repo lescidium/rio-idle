@@ -108,11 +108,11 @@ def time_form(raw):
 ########################################Single fcts better for DataFrames...##########################################
 
 def num2MBT(num):
-    if num >= 1000000 and num <= 999999999:
+    if np.abs(num) >= 1000000 and num <= 999999999:
         fnum = str(round(num/1000000,3))+' M'
-    if num >= 1000000000 and num <= 999999999999:
+    if np.abs(num) >= 1000000000 and num <= 999999999999:
         fnum = str(round(num/1000000000,3))+' B'
-    if num >= 1000000000000:
+    if np.abs(num) >= 1000000000000:
         fnum = str(round(num/1000000000000,3))+' T'
     return fnum
 
@@ -121,25 +121,6 @@ def num2perc(num):
 
 def num2doll(num):
     return '$'+str(round(num,2))
-
-def num_form(num,style):
-    """Format a variety numbers into readable strings."""
-    
-    if style == 'big':
-        if num >= 1000000 and num <= 999999999:
-            fnum = str(round(num/1000000,3))+' M'
-        if num >= 1000000000 and num <= 999999999999:
-            fnum = str(round(num/1000000000,3))+' B'
-        if num >= 1000000000000:
-            fnum = str(round(num/1000000000000,3))+' T'
-    elif style == 'perc':
-        fnum = str(round(num*100,3))+'%'    
-    elif style == 'doll':
-        fnum = '$'+str(round(num,2))
-    else:
-        fnum = f"Style {style} not recognize" 
-            
-    return fnum
 
 def num_raw(num,style):
     """Reverse process of num_form function."""
@@ -153,7 +134,7 @@ def num_raw(num,style):
         elif 'T' in num:
             rnum = float(num.replace(' T',''))*1000000000000
     elif style == 'perc':
-        rnum = float(num.replace('%',''))    
+        rnum = float(num.replace('%','')) /100   
     elif style == 'doll':
         rnum = float(num.replace('$',''))
     else:
@@ -162,13 +143,10 @@ def num_raw(num,style):
 
 ########################################Single fcts better for DataFrames...##########################################
 
-def forcast(fcf_avg,yrs_len,grow):
-    """
-    Forecast the growth of cash flow by the desired amount of years.
-
-    The length of years is usually anywhere from five to ten.
-    Growth is a parameter set outside the function and usually is pessimistically set to zero.
-    """
+def exp_for(fcf,yrs_len,grow):
+    """Forecast the growth of cash flow with a set power growth rate."""
+    
+    fcf_avg = list_avg(fcf)
     i=0
     f_fcf = np.zeros(yrs_len)
     f_fcf[0] = fcf_avg
@@ -177,118 +155,82 @@ def forcast(fcf_avg,yrs_len,grow):
         i=i+1
     return f_fcf
 
+def lin_for(fcf,yrs_len):
+    """Forecast future cash flow with linear extrapolation."""
+    
+    slope,intercept = soojin.linfit(fcf)
+    
+    i=0
+    f_fcf = np.zeros(yrs_len)
+    f_fcf[0] = fcf[(len(fcf)-1)]+slope
+    while i < (yrs_len-1):
+        f_fcf[i+1] = f_fcf[i]+slope
+        i+=1
+    return f_fcf
+
 def discount(f_fcf,yrs_len,disc):
     """
     Discount each year in the forecasted cash flow by a power law.
 
-    The discount percent is the return you want to see in your investment, often set to 7%.
+    The discount percent is related to the time value of money.
+    What could you be doing with money you had right now?
     """
     i=0
     d_fcf = np.zeros(yrs_len)
-    for yer in range(yrs_len):
-        d_fcf[i] = f_fcf[i]/(1+disc)**(yer+1)
+    for y in range(yrs_len):
+        d_fcf[i] = f_fcf[i]/(1+disc)**(y+1)
         i=i+1
     return d_fcf
 
-def valeria(fcf,caps):
+def valeria(fcf,mcap,params,style):
     """
     Utilizes the forecast, discount, and list_avg functions to place a fair value on a given company.
 
+    Params is a 4 element tuple containing params in the following order:
+    disc, infl, grow, yrs_len
+    Style is 1 or 0. Choose 0 for power forecast of FCF, 1 for linear extrapolation forecast.
+    
     The output is another dataframe containing relevant information to the valuation calculation.
     The main metric in the output is a percentage derived from: (realPrice-fairPrice)/(fairPrice).
     If positive: overvalued by the given percent. If negative: undervalued by the given percent.
     """
-    disc = 0.07
-    infl = 0.02
-    grow = 0.00
-#    print('Discount: ',disc,'%','\nInflation: ',infl,'%','\nGrowth: ',grow,'%')
-    assum = pd.DataFrame([disc,infl,grow],index=['Discount Rate: ','Inflation: ','Growth: '],
-                         columns=['Fair Value Discount Assumptions'])
-
-    fcf_avg = list_avg(fcf)
+    
+    if len(params) == 4:
+        disc = params[0]
+        infl = params[1]
+        grow = params[2]
+        yrs_len = params[3]
+    else:
+        print('Need 4 params to run: Disc, Infl, Grow, Yrs_len (future forecast)')
+        return
 
 ###########################Actual Calculation##################################
 
-    #Calculate forecasted and discounted CF vectors
-    f_fcf = forcast(fcf_avg,yrs_len,grow)
-    d_fcf = discount(f_fcf,yrs_len,disc)
-    #Calc terminal and fair value
-    t_val = f_fcf[yrs_len-1]*(1+infl)/(disc-infl)
-    f_val = d_fcf.sum()+t_val #Old Discounted Cash Flow Calculation
-    #f_val = fcf_avg/disc
-
-    #Find the 'Current' actual price, either live or dated.
-    if yrs_bak == 0:
-        mcap = pdr.data.get_quote_yahoo(tick)['marketCap'][0]
-        shares = pdr.data.get_quote_yahoo(tick)['sharesOutstanding'][tick]
-        price = pdr.data.get_quote_yahoo(tick)['regularMarketPreviousClose'][0]
-        #Live error is the percentage difference between Market Cap derived stock price
-        # and the previous close stock price.
-        error = round(np.abs(((mcap/shares)-price)/price),3)
-#        print('Live error: ',error,'\n')
-    else:
-#        print(caps.loc[(int(datetime.date.today().year)-yrs_bak)],'\n^^^ MarketCap, Time @ end of Year Shown ^^^')
-        mcap = caps[tick][(int(datetime.date.today().year)-yrs_bak)]
-        stupid_param = str(int(datetime.date.today().year) - (yrs_bak-1)) #This is insane.
-        #I really need to figure this out someday...
-        #You see, two different data sources have different levels of current... It messes up indexing.
-        if '.' in tick:
-            tick=tick.replace('.','-')
-        link = 'https://query1.finance.yahoo.com/v8/finance/chart/'+tick+'?interval=1mo&range='+str(yrs_bak+1)+'y'
-
-        r = requests.get(link)
-        time = r.json()['chart']['result'][0]['timestamp']
-        high = r.json()['chart']['result'][0]['indicators']['quote'][0]['high']
-        low = r.json()['chart']['result'][0]['indicators']['quote'][0]['high']
-
-        i=0
-        for t in time:
-            timestamp = datetime.datetime.fromtimestamp(int(t))
-            if stupid_param+'-01' in timestamp.strftime('%Y-%m-%d %H:%M:%S'):
-#                print('Time of price: ',timestamp.strftime('%Y-%m-%d %H:%M:%S'))
-                price = (high[i]+low[i])/2
-            i+=1
-        shares = round(mcap/price)
-        error = 0
-#        print('Stupid error, code later: ',error,'\n')
-
-    f_price = f_val/shares
-    f_price = round(f_price,2)
+    #Guessing the future
+    if style == 0:
+        f_fcf = exp_for(fcf,yrs_len,grow)
+    elif style == 1:
+        f_fcf = lin_for(fcf,yrs_len)
+    #Accounting for time value of money in discounting
+    dcf = discount(f_fcf,yrs_len,disc)
+    #Calculating terminal value with Perpetuity method
+    tval = (f_fcf[yrs_len-1]*(1+infl))/(disc-infl)
+    #Summing values
+    fval = dcf.sum()+tval
 
 ######################################################################
 
-    if len(fcf) >= 5:
-        qk_sc = list_avg(fcf[:5])/0.07
-    else:
-        qk_sc = list_avg(fcf)/0.07
-        print(f"Limited data. Calculating Quick Screen from {len(fcf)} yrs of data")
-        #Quick Screen Value, present cash over expected return
+    qk_sc = list_avg(fcf[:5])/0.07
+    print(f"Quick screen: {qk_sc}")
 
-    if f_val > 0:
-#        print('Fair Value: ',f_val,'\nFair Price: ',f_price,
-#              '\n\nMarket Cap: ',mcap,'\nStock Price: ',price,'\n')
-        valuation = (mcap-f_val)/(f_val)
+    if fval > 0:
+        valuation = (mcap-fval)/(fval)
         if valuation < 0:
-#            print('Stock Under-Priced By: ',round(valuation*100),'%')
-            col = ['Fair Valuation, Cash Discounted Method']
-            ind = ['Fair Value','Fair Price','Market Cap','Stock Price',
-                   'Stock Under-Priced By','Years of Data Used','Quick Screen Value (5 year avg)']
-            val_report = pd.DataFrame([num_form(f_val,'big'),num_form(f_price,'doll'),num_form(mcap,'big'),
-                                       num_form(price,'doll'),num_form(valuation,'perc'),len(fcf),
-                                       num_form(qk_sc,'big')],columns=col, index=ind)
+            print(f"Stock Under-Priced By: {num2perc(valuation)}")
         else:
-#            print('Stock Over-Priced By: ',round(valuation*100),'%')
-            col = ['Fair Valuation, Cash Discounted Method']
-            ind = ['Fair Value','Fair Price','Market Cap','Stock Price',
-                   'Stock Over-Priced By','Years of Data Used','Quick Screen Value (5 year avg)']
-            val_report = pd.DataFrame([num_form(f_val,'big'),num_form(f_price,'doll'),num_form(mcap,'big'),
-                                       num_form(price,'doll'),num_form(valuation,'perc'),len(fcf),
-                                       num_form(qk_sc,'big')],columns=col, index=ind)
+            print(f"Stock Over-Priced By: {num2perc(valuation)}")
     else:
-#        print('Average Free Cash Flow is NEGATIVE. Valuation Statement is Meaningless')
-#        print('\n\nMarket Cap: ',mcap,'\nStock Price: ',stock,'\n')
-        col = ['Fair Valuation, Cash Discounted Method']
-        ind = ['Average Free Cash Flow is NEGATIVE. Valuation Statement is Meaningless',
-               'Market Cap: ','Stock Price: ']
-        val_report = pd.DataFrame([np.nan,num_form(mcap,'big'),price],columns=col, index=ind)
-    return(val_report,assum)
+        print('Average Free Cash Flow is NEGATIVE. Valuation Statement is Meaningless')
+        print(f"tval: {tval}, fval: {fval}, f_fcf: {f_fcf}, dcf: {dcf}")
+        valuation = 0
+    return valuation
