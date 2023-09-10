@@ -121,12 +121,13 @@ def macro_scrape(tick,sheet):
 
 
     url = 'https://www.macrotrends.net/stocks/charts/'+ tick + '/hyung/' + sheet
-    #print(url)
+#     print(url)
     try:
         read = ur.urlopen(url).read()
     except HTTPError:
-        print('CHIIIIIIIINGUS')
-        return 0
+        print('HTTPError (Probably 403 Access Denied). Trying again with User-Agent set to Mozilla')
+        req = ur.Request(url=url,headers={'User-Agent': 'Mozilla/5.0'})
+        read = ur.urlopen(req).read()
     soup = BeautifulSoup(read,'lxml')
 
     mydat = soup.find_all('script')
